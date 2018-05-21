@@ -420,6 +420,10 @@ public class MenuEntrySwapperPlugin extends Plugin
 		{
 			swap("chase", option, target, true);
 		}
+		else if (config.swapWithdraw() && option.equals("withdraw-1"))
+		{
+			swapWithdraw("withdraw-x", option, target, true);
+		}
 		else if (config.shiftClickCustomization() && shiftModifier && !option.equals("use"))
 		{
 			Integer customOption = getSwapConfig(itemId);
@@ -497,6 +501,30 @@ public class MenuEntrySwapperPlugin extends Plugin
 
 		int idxA = searchIndex(entries, optionA, target, strict);
 		int idxB = searchIndex(entries, optionB, target, strict);
+
+		if (idxA >= 0 && idxB >= 0)
+		{
+			MenuEntry entry = entries[idxA];
+			entries[idxA] = entries[idxB];
+			entries[idxB] = entry;
+
+			client.setMenuEntries(entries);
+		}
+	}
+
+	private void swapWithdraw(String optionA, String optionB, String target, boolean strict)
+	{
+		MenuEntry[] entries = client.getMenuEntries();
+
+		int idxA = searchIndex(entries, optionA, target, strict);
+		int idxB = searchIndex(entries, optionB, target, strict);
+
+		String entryOption = Text.removeTags(entries[entries.length-4].getOption()).toLowerCase();
+
+		if (!entryOption.equals("withdraw-x"))
+		{
+			idxA++;
+		}
 
 		if (idxA >= 0 && idxB >= 0)
 		{
